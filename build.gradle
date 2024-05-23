@@ -1,0 +1,48 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
+
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/releases/'
+        }
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
+
+        maven {
+            url  "https://cardinalcommerceprod.jfrog.io/artifactory/android"
+            credentials {
+                username 'bluesnap_sdk_users'
+                // This is here by design:
+                password 'AKCp8jQnUytDaavAPeaX5SfvRP8e6PUsrmh8cyp1Be5wBpBdDKhLRmaaKiKj3pnFwu9mwzv2n' // public password.. not a secret.
+            }
+        }
+    }
+
+    ext {
+        compileSdkVersion = 33
+        buildToolsVersion = '29.0.2'
+        minSdkVersion = 24
+        targetSdkVersion = 33
+    }
+
+}
