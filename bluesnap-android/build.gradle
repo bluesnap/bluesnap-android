@@ -1,0 +1,220 @@
+//plugins {
+//    id 'com.gladed.androidgitversion' version '0.4.9'
+//}
+
+apply plugin: 'com.android.library'
+apply plugin: 'checkstyle'
+apply plugin: 'kotlin-android'
+
+def getVersionCode = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-list', '--first-parent', '--count', 'master'
+            standardOutput = stdout
+        }
+        return Integer.parseInt(stdout.toString().trim())
+    }
+    catch (ignored) {
+        return -1;
+    }
+}
+
+def getVersionName = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'describe', '--tags', '--dirty'
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    }
+    catch (ignored) {
+        return null;
+    }
+}
+
+//
+//android {
+//    defaultConfig {
+//        versionCode getVersionCode()
+//        versionName getVersionName()
+//    }
+//}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        multiDexEnabled true
+
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    sourceSets {
+        main {
+            res.srcDirs += 'src/main/res-cards'
+            res.srcDirs += 'src/main/res-flags'
+            res.srcDirs +=
+                    [
+                            'src/main/res/layouts/activities',
+                            'src/main/res/layouts/fragments',
+                            'src/main/res/layouts/components',
+                            'src/main/res/layouts',
+                            'src/main/res'
+                    ]
+        }
+        
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_18
+        targetCompatibility JavaVersion.VERSION_18
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            buildConfigField 'int', 'VERSION_CODE', "${getVersionCode()}"
+            buildConfigField 'String', 'VERSION_NAME', "\"${getVersionName()}\""
+        }
+        debug {
+            buildConfigField 'int', 'VERSION_CODE', "${getVersionCode()}"
+            buildConfigField 'String', 'VERSION_NAME', "\"${getVersionName()}\""
+        }
+
+    }
+
+    lintOptions {
+        quiet false
+        //abortOnError false
+        ignoreWarnings true
+        disable 'MissingTranslation' //This is disabled until we get updated translations
+    }
+
+    testOptions {
+        unitTests.all {
+            systemProperty 'robolectric.dependency.repo.url', 'https://repo1.maven.org/maven2'
+        }
+    }
+    namespace 'com.bluesnap.androidapi'
+
+}
+configurations {
+
+}
+
+/**
+ * BuildConfig credentials for integration tests
+ */
+def sdkUserEnv = System.getenv('BS_API_USER')
+def sdkPasswordEnv = System.getenv('BS_API_PASSWORD')
+def sdkPaypalEmail = System.getenv('BS_PAYPAL_EMAIL')
+def sdkPaypalPassword = System.getenv('BS_PAYPAL_PASSWORD')
+
+if (file("../local.gradle").exists()) {
+    apply from: "../local.gradle"
+} else if (sdkUserEnv!=null && !sdkUserEnv.isEmpty() && sdkPasswordEnv != null && !sdkPasswordEnv.isEmpty()) {
+    android {
+        buildTypes {
+            buildTypes.all {
+                buildConfigField "String", "BS_API_USER", "\"" + sdkUserEnv + "\""
+                buildConfigField "String", "BS_API_PASSWORD", "\"" + sdkPasswordEnv + "\""
+                buildConfigField "String", "BS_PAYPAL_EMAIL", "\"" + sdkPaypalEmail + "\""
+                buildConfigField "String", "BS_PAYPAL_PASSWORD", "\"" + sdkPaypalPassword + "\""
+
+            }
+
+        }
+    }
+}
+else {
+    print('--------------------- Missing API credentials for integration tests --------------')
+    //throw new GradleException("Please make sure your API Credentials are in local.gradle ")
+    //throw new GradleException("Please make sure your API Credentials are in local.gradle ")
+}
+
+
+dependencies {
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    // Cardinal Required libraries
+    implementation 'org.jfrog.cardinalcommerce.gradle:cardinalmobilesdk:2.2.7-5'
+
+    implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '7.0.1'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    // Added for Google-Pay
+    //implementation 'com.google.android.gms:play-services:12.0.1'
+    implementation 'com.google.android.gms:play-services-wallet:18.1.3'
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation "com.google.truth:truth:0.36"
+    testImplementation "org.mockito:mockito-core:2.19.0"
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
+    testImplementation 'org.robolectric:robolectric:4.9'
+
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    testImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
+
+    testImplementation 'org.powermock:powermock-api-mockito:1.6.1'
+    testImplementation 'org.powermock:powermock-module-junit4-rule-agent:1.6.1'
+    testImplementation 'org.powermock:powermock-module-junit4-rule:1.6.1'
+    testImplementation 'org.powermock:powermock-module-junit4:1.6.1'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.19.0'
+    testImplementation 'androidx.test.ext:junit:1.1.4'
+
+}
+
+tasks.withType(Test) {
+    systemProperty "robolectric.logging", "stdout"
+    testLogging {
+        exceptionFormat "full"
+        events "started", "skipped", "passed", "failed"
+        showStandardStreams true
+    }
+}
+
+task javadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+task javadocsJar(type: Jar, dependsOn: javadocs) {
+    classifier = 'javadoc'
+    from javadocs.destinationDir
+}
+
+
+artifacts {
+    //archives javadocsJar
+    //archives sourcesJar
+}
+
+//androidGitVersion {
+//    hideBranches = ['develop', 'master', 'review']
+//}
+
+/**
+ * CI/CD artifact versioning
+ */
+//String versionName = "v-" + System.getenv('TRAVIS_BRANCH') + "-" + System.getenv('TRAVIS_TAG') + "-" + System.getenv('TRAVIS_JOB_NUMBER')
+//def siteUrl = 'https://github.com/bluesnap/bluesnap-android-int'
+//def gitUrl = 'https://github.com/bluesnap/bluesnap-android-int.git'
+version = getVersionName()
