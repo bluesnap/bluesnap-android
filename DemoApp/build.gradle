@@ -1,0 +1,100 @@
+apply plugin: 'com.android.application'
+
+android {
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        com.android.ddmlib.DdmPreferences.setTimeOut(60000)
+
+        versionName getVersionName()
+        versionCode getVersionCode()
+        //setProperty("archivesBaseName", "DemoApp-$versionName")
+        testBuildType "debug"
+        multiDexEnabled true
+
+    }
+    buildTypes {
+        release {
+            //runProguard false
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+        }
+        debug {
+
+        }
+
+    }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_19
+        targetCompatibility JavaVersion.VERSION_19
+    }
+
+    namespace 'com.bluesnap.android.demoapp'
+    lint {
+        abortOnError false
+        disable 'MissingTranslation'
+        ignoreWarnings true
+        quiet false
+    }
+
+
+}
+
+
+dependencies {
+    implementation project(':bluesnap-android')
+
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.1.0'
+
+    // Added for Google-Pay
+    //implementation 'com.android.support:multidex:1.0.3'
+
+    androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support:support-annotations'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-web:3.2.0'
+    androidTestImplementation('androidx.test.espresso:espresso-intents:3.2.0', )
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0')
+
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
+
+
+}
+
+/**
+ * BuildConfig credentials
+ */
+def sdkUserEnv = System.getenv('BS_API_USER')
+def sdkPasswordEnv = System.getenv('BS_API_PASSWORD')
+def sdkPaypalEmail = System.getenv('BS_PAYPAL_EMAIL')
+def sdkPaypalPassword = System.getenv('BS_PAYPAL_PASSWORD')
+
+if (file("../local.gradle").exists()) {
+    print('------------------- Adding buildconfig credentilas form local.gradle --------------------')
+    apply from: "../local.gradle"
+} else if (sdkUserEnv!=null && !sdkUserEnv.isEmpty() && sdkPasswordEnv != null && !sdkPasswordEnv.isEmpty()) {
+    print('------------------- Adding buildconfig credentilas form env  --------------------')
+    android {
+        buildTypes {
+
+            buildTypes.all  {
+                        buildConfigField "String", "BS_API_USER", "\"" + sdkUserEnv + "\""
+                        buildConfigField "String", "BS_API_PASSWORD", "\"" + sdkPasswordEnv + "\""
+                        buildConfigField "String", "BS_PAYPAL_EMAIL", "\"" + sdkPaypalEmail + "\""
+                        buildConfigField "String", "BS_PAYPAL_PASSWORD", "\"" + sdkPaypalPassword + "\""
+
+                    }
+        }
+    }
+}
+else {
+    print('------------------- NO API CREDENTIALS - DEMO API CALLS WILL FAIL --------------------')
+    //throw new GradleException("Please make sure your API Credentials are in local.gradle ")
+}
