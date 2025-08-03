@@ -1,0 +1,219 @@
+name: Android CI
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  # Job to run Unit and Integration Tests
+  unit_integration_tests:
+
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        api-level: [ 35 ]
+    env:
+      BS_API_USER: ${{ secrets.BS_API_USER }}
+      BS_API_PASSWORD: ${{ secrets.BS_API_PASSWORD }}
+      JAVA_OPTS: "-Xmx2g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 300
+      DISPLAY: :99
+
+#    if: ${{github.event_name == 'push'}}
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 19
+          distribution: zulu
+
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Enable KVM group
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          
+      - name: Install emulator dependencies
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y libgl1-mesa-dev xvfb qemu-kvm
+          
+      - name: Setup DISPLAY for headless emulator
+        run: |
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          sleep 3
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: google_apis
+          arch: x86_64
+          cache-disabled: false
+
+      - name: Gradle build
+        run: ./gradlew build --stacktrace
+
+      - name: Run Unit and Integration Tests
+        run: ./gradlew :bluesnap-android:testDebugUnitTest
+
+      - name: run tests
+        uses: reactivecircus/android-emulator-runner@v2.34.0
+        with:
+          api-level: ${{ matrix.api-level }}
+          force-avd-creation: false
+          target: google_apis
+          arch: x86_64
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -netfast -memory 4096
+          disable-animations: true
+          emulator-boot-timeout: 300
+          script: ./gradlew -i :bluesnap-android:connectedAndroidTest
+
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure() # always run even if the previous step fails
+        with:
+          include_passed: true
+          fail_on_failure: true
+          report_paths: '**/build/outputs/androidTest-results/connected/TEST-*.xml'
+
+
+  #  # Job to run Sanity Tests in DemoApp on Pull Requests
+#  sanity_tests:
+#    runs-on: self-hosted
+#    strategy:
+#      matrix:
+#        api-level: [ 34 ]
+#    env:
+#      BS_API_USER: ${{ secrets.BS_API_USER }}
+#
+#      BS_API_PASSWORD: ${{ secrets.BS_API_PASSWORD }}
+#
+#    if: github.event_name == 'pull_request'
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#
+#      - name: Set up JDK 19
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: 'zulu'
+#          java-version: '19'
+#
+#      - name: Gradle cache
+#        uses: gradle/actions/setup-gradle@v3
+#
+#      - name: AVD cache
+#        uses: actions/cache@v4
+#        id: avd-cache
+#        with:
+#          path: |
+#            ~/.android/avd/*
+#            ~/.android/adb*
+#          key: avd-${{ matrix.api-level }}
+#
+#      - name: run SanitySuite UI tests
+#        uses: reactivecircus/android-emulator-runner@v2.33.0
+#        with:
+#          api-level: ${{ matrix.api-level }}
+#          force-avd-creation: false
+#          target: google_apis
+#          arch: x86_64
+#          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+#          disable-animations: true
+#          script: ./gradlew :DemoApp:connectedDebugAndroidTest --tests "com.bluesnap.android.demoapp.SanitySuite"
+#
+#
+
+  # Job to run Unit and Integration Tests
+  ui_sanity_tests:
+
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        api-level: [ 35 ]
+    env:
+      BS_API_USER: ${{ secrets.BS_API_USER }}
+      BS_API_PASSWORD: ${{ secrets.BS_API_PASSWORD }}
+      JAVA_OPTS: "-Xmx2g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+      DISPLAY: :99
+
+    #if: github.event_name == 'push'
+    #    if: github.event_name == 'pull_request'
+    if: ${{github.ref == 'refs/heads/develop-tests'}}
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 19
+          distribution: zulu
+
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Enable KVM group
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          
+      - name: Install emulator dependencies
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y libgl1-mesa-dev xvfb qemu-kvm
+          
+      - name: Setup DISPLAY for headless emulator
+        run: |
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          sleep 3
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: google_apis
+          arch: x86_64
+          cache-disabled: false
+
+      - name: Gradle build
+        run: ./gradlew build --stacktrace
+
+      - name: Run Unit and Integration Tests
+        run: ./gradlew :bluesnap-android:testDebugUnitTest
+
+      - name: run tests
+        uses: reactivecircus/android-emulator-runner@v2.34.0
+        with:
+          api-level: ${{ matrix.api-level }}
+          force-avd-creation: false
+          target: google_apis
+          arch: x86_64
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -netfast -memory 4096
+          disable-animations: true
+          emulator-boot-timeout: 300
+          script: ./gradlew :DemoApp:connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.bluesnap.android.demoapp.SanitySuite
+
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure() # always run even if the previous step fails
+        with:
+          report_paths: '**/build/outputs/androidTest-results/connected/TEST*.xml'
+          include_passed: true
+          fail_on_failure: false
