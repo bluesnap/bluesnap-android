@@ -1,0 +1,6 @@
+# JDK option is ignores due to jitpack issue https://github.com/jitpack/jitpack.io/issues/4260
+#jdk:
+#  - openjdk21
+before_install:
+  - sdk install java 19.0.2-zulu
+  - sdk use java 19.0.2-zulu
