@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!--<uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />-->
+
+    <!-- Kount-->
+    <!--<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />-->
+    <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
+
+    <application android:supportsRtl="true" android:allowBackup="false">
+        <activity
+            android:name=".views.activities.CreditCardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".views.activities.BluesnapCheckoutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".views.activities.BluesnapChoosePaymentMethodActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".views.activities.BluesnapCreatePaymentActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".views.activities.CurrencyActivity"
+            android:label="@string/title_activity_currency"
+            android:parentActivityName=".views.activities.CreditCardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.activities.CreditCardActivity" />
+        </activity>
+        <activity
+            android:name=".views.activities.CountryActivity"
+            android:label="@string/title_activity_state"
+            android:parentActivityName=".views.activities.CreditCardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.activities.CreditCardActivity" />
+        </activity>
+        <activity
+            android:name=".views.activities.StateActivity"
+            android:label="@string/title_activity_country"
+            android:parentActivityName=".views.activities.CreditCardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.activities.CreditCardActivity" />
+        </activity>
+        <activity
+            android:name=".views.activities.WebViewActivity"
+            android:label="@string/title_activity_web_view"
+            android:parentActivityName=".views.activities.CreditCardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.activities.CreditCardActivity" />
+        </activity>
+
+        <!-- This element is required in order to use the PaymentsClient -->
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
+
+    </application>
+
+</manifest>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Merchant</string>
+    <string-array name="rates">
+        <item>USD</item>
+        <item>EUR</item>
+        <item>CAD</item>
+        <item>ILS</item>
+
+    </string-array>
+    <string name="title_activity_post_payment">PostPayment</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="allow_currency_change">Allow Currency Change</string>
+    <string name="returning_shopper_details">Returning shopper details</string>
+    <string name="existing_shopper">Existing Shopper</string>
+    <string name="shopper_config">Activate Shopper Config</string>
+    <string name="shopper_id">ID</string>
+    <string name="_12345678">12345678</string>
+    <string name="_22061813">22061813</string>
+    <string name="merchant_store_currency">Merchant Store Currency</string>
+    <string name="_dollar_sign">$</string>
+    <string name="_0">0</string>
+    <string name="currency">Currency</string>
+    <string name="pay_now_with_bluesnap">Pay Now with BlueSnap</string>
+    <string name="version">version</string>
+    <string name="todo">TODO</string>
+    <string name="second_step_for_shopper_configuration">second step for shopper configuration</string>
+    <string name="submit_subscription">submit subscription</string>
+    <string name="google_pay_test_mode">Run Google Pay in TEST mode</string>
+    <string name="disable_google_pay">Disable Google Pay</string>
+    <string name="activate_3DS">Activate 3DS</string>
+
+</resources>

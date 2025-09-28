@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">MerchantApp</string>
+    <string name="drawable" translatable="false">buynow</string>
+    <string name="emailField">Email</string>
+    <string name="card">Card</string>
+    <string name="cvv">CVV</string>
+    <string name="exp">Exp:</string>
+    <string name="remember_me">Remember me</string>
+    <string name="credit_debit_card">Credit/Debit Card</string>
+    <string name="express_checkout">Express Checkout</string>
+    <string name="select_your_express_checkout_method">Select your express checkout method</string>
+    <string name="name">Name</string>
+    <string name="please_enter_your_name">Please enter first and last name</string>
+    <string name="address">Address</string>
+    <string name="invalid_address_line">Invalid Address Line</string>
+    <string name="invalid_email_address">Invalid Email Address</string>
+    <string name="zip">Zip</string>
+    <string name="billing_zip">Billing Zip</string>
+    <string name="country">Country</string>
+    <string name="state">State</string>
+    <string name="city">City</string>
+    <string name="continueShopping">Continue</string>
+    <string name="shipping_information">Shipping information</string>
+    <string name="invalid_card_number">Invalid Card Number</string>
+    <string name="coupon_questionmark" translatable="false">Coupon?</string>
+    <string name="done">Done</string>
+    <string name="shipping">Shipping</string>
+    <string name="submit">Submit</string>
+    <string name="billing">Billing</string>
+    <string name="payment">Payment</string>
+    <string name="payment_type">Payment Type</string>
+    <string name="shipping_Info">Shipping Info</string>
+    <string name="pay">Pay</string>
+    <string name="total">Total</string>
+    <string name="buynowbutton" translatable="false">BuyNowbutton</string>
+    <string name="desc" translatable="false">View Description</string>
+
+    <string name="hint_name">Full Name</string>
+    <string name="hint_email">Email</string>
+    <string name="err_msg_name">Enter your full name</string>
+    <string name="err_msg_email">Enter valid email address</string>
+    <string name="err_msg_zip">Enter a valid zip / postal code</string>
+    <string name="err_msg_state">Enter a valid state</string>
+    <string name="err_msg_city">Enter a valid city</string>
+    <string name="err_msg_address">Enter a valid address</string>
+
+    <string name="search">Search</string>
+    <string name="language">Language -</string>
+    <string name="select_language">Select Language</string>
+    <string name="title_activity_language" translatable="false">LanguageActivity</string>
+
+    <string name="currency">Currency -</string>
+    <string name="select_currency">Select Currency</string>
+    <string name="title_activity_currency" translatable="false">CurrencyActivity</string>
+
+    <string name="title_activity_web_view" translatable="false">WebViewActivity</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="refund_policy">Refund Policy</string>
+    <string name="terms_conditions">Terms &amp; Conditions</string>
+    <string name="privacy_policy_url" translatable="false">https://home.bluesnap.com/ecommerce/legal/privacy-policy/</string>
+    <string name="refund_policy_url" translatable="false">http://home.bluesnap.com/ecommerce/legal/refund-policy/</string>
+    <string name="terms_conditions_url" translatable="false">http://home.bluesnap.com/ecommerce/legal/terms-and-conditions/</string>
+    <!-- Language -->
+    <string name="LOCALE_LANGUAGE" translatable="false">localelanguage</string>
+    <string name="LOCALE_LANGUAGE_FULL" translatable="false">localelanguagefull</string>
+    <string name="DEFAULT_LANGUAGE" translatable="false">en</string>
+    <string name="DEFAULT_LANGUAGE_FULL" translatable="false">English</string>
+    <!-- Currency -->
+    <string name="CURRENCY_STRING" translatable="false">CURRENCY_STRING</string>
+    <string name="LOCALE_CURRENCY" translatable="false">localeCurrency</string>
+    <string name="LOCALE_CURRENCY_FULL" translatable="false">localeCurrencyfull</string>
+    <string name="DEFAULT_CURRENCY" translatable="false">USD</string>
+    <string name="DEFAULT_CURRENCY_FULL" translatable="false">USD - United States Dollars</string>
+    <!-- Country -->
+    <string name="COUNTRY_STRING" translatable="false">COUNTRY_STRING</string>
+    <string name="STATE_STRING" translatable="false">STATE_STRING</string>
+    <string name="title_activity_country" translatable="false">CountryActivity</string>
+    <string name="title_activity_state" translatable="false">StateActivity</string>
+    <string name="select_country">Select Country</string>
+    <string name="select_state">Select State</string>
+    <!-- WebView Activity -->
+    <string name="WEBVIEW_STRING" translatable="false">WEBVIEW_STRING</string>
+    <string name="WEBVIEW_URL" translatable="false">WEBVIEW_URL</string>
+    <string name="SET_JAVA_SCRIPT_ENABLED" translatable="false">SET_JAVA_SCRIPT_ENABLED</string>
+    <string name="subtotal_label">Subtotal:</string>
+    <string name="tax_label">Tax:</string>
+
+    <!-- Alert Dialog-->
+    <string name="CURRENCY_NOT_SUPPORTED_PART_TITLE">PayPal unsupported Currency</string>
+    <string name="CURRENCY_NOT_SUPPORTED_PART_1">The given currency</string>
+    <string name="CURRENCY_NOT_SUPPORTED_PART_2">is not supported with PayPal.</string>
+    <string name="CURRENCY_NOT_SUPPORTED_PART_3">change to a PayPal supported Currency</string>
+    <string name="OK">ok</string>
+    <string name="CANCEL">cancel</string>
+
+    <string name="SUPPORT">contact Support for additional assistance</string>
+    <string name="SUPPORT_OR">or</string>
+    <string name="SUPPORT_PLEASE">Please</string>
+    <string name="ERROR">Error</string>
+    <string name="TRANSACTION_FAILED">Transaction Failed</string>
+    <string name="nameField">Name</string>
+
+    <!-- Hints-->
+    <string name="name_hint">John Doe</string>
+    <string name="cc_hint" translatable="false">1234 5678 9012 3456</string>
+    <string name="cvv_hint" translatable="false">123</string>
+    <string name="email_hint" translatable="false">JohnDoe@Email.com</string>
+    <string name="street_hint">Street</string>
+    <string name="postal_code_hint">Postal Code</string>
+    <string name="mm_yy">MM/YY</string>
+    <string name="coupon" translatable="false"> Coupon</string>
+    <string name="merchant">Merchant</string>
+    <string name="_0" translatable="false">0</string>
+    <string name="webview">WebView</string>
+    <string name="lastFourDigitsHint" translatable="false">1234</string>
+    <string name="cardTypeImageText" translatable="false">CardTypeImage</string>
+    <string name="newCardText">New Card</string>
+    <string name="card_icon" translatable="false">card icon</string>
+    <string name="move_from_cc_to_exp_button" translatable="false">move from cc to exp button</string>
+    <string name="invalid_date">Invalid date</string>
+    <string name="invalid_cvv">Invalid CVV</string>
+    <string name="shipping_same_as_billing">Shipping same as billing</string>
+    <string name="subscribe">Subscribe</string>
+    <string name="store_card">Securely store my card</string>
+    <string name="can_cancel_subscriptions">You can cancel subscriptions at any time</string>
+
+</resources>
