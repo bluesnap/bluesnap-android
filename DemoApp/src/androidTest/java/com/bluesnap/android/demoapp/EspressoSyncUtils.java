@@ -26,6 +26,12 @@ import org.hamcrest.Matcher;
  */
 public class EspressoSyncUtils {
 
+    static {
+        // Automatically configure extended timeouts when this class is loaded
+        // This ensures all tests using EspressoSyncUtils get the extended timeouts
+        EspressoTimeoutConfig.configureForCiIfNeeded();
+    }
+
     /**
      * Custom ViewAction that waits for a view to be displayed before proceeding
      */
@@ -82,6 +88,12 @@ public class EspressoSyncUtils {
      * Wait for UI to be idle with timeout
      */
     public static void waitForIdle() {
+        try {
+            // First ensure window focus with extended timeout for CI
+            onView(ViewMatchers.isRoot()).perform(EspressoTimeoutConfig.waitForWindowFocus());
+        } catch (Exception e) {
+            // If window focus fails, continue anyway - the regular Espresso timeout will handle it
+        }
         Espresso.onIdle();
     }
 

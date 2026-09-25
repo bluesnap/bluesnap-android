@@ -43,7 +43,7 @@ public class IntegrationTestsHelper {
         // Initialize card info
         final CreditCard card = new CreditCard();
         String number = creditCard;
-        card.update(number, "11/25", "123");
+        card.update(number, TestExpirationDateUtils.getDefaultExpirationDateString(), "123");
 
         // Initialize PurchaseDetails
         final PurchaseDetails purchaseDetails = new PurchaseDetails();
@@ -126,6 +126,19 @@ public class IntegrationTestsHelper {
         try {
             BlueSnapHTTPResponse blueSnapHTTPResponse = blueSnapService.submitTokenizedEcpAchDetails(ecpAchDetails);
             assertEquals(HTTP_OK, blueSnapHTTPResponse.getResponseCode());
+
+//            JSONObject jsonObject = new JSONObject(blueSnapHTTPResponse.getResponseString());
+//            String publicAccountNumber = jsonObject.getString("publicAccountNumber");
+//            String publicRoutingNumber = jsonObject.getString("publicRoutingNumber");
+//            String responseAccountType = jsonObject.getString("accountType");
+//
+//            // Verify response details
+//            String expectedPublicAccountNumber = accountNumber.substring(accountNumber.length() - 5);
+//
+//            assertEquals(expectedPublicAccountNumber, publicAccountNumber);
+//            assertEquals(routingNumber.length(), 9);
+//            assertEquals(publicRoutingNumber.length(), 9);
+//            assertEquals(accountType.toUpperCase(), responseAccountType);
 
         } catch (Exception e) {
             Log.e(TAG, "Exception while processing ACH payment details", e);

@@ -220,12 +220,19 @@ public class CardinalManager  {
             public void onValidated(Context context, ValidateResponse validateResponse, String s) {
                 Log.d(TAG, "Cardinal validated callback");
 
+                // Use activity as fallback if context is null (activity destroyed during 3DS flow)
+                Context safeContext = context != null ? context : activity;
+
                 if (validateResponse.getActionCode().equals(CardinalActionCode.NOACTION) || validateResponse.getActionCode().equals(CardinalActionCode.SUCCESS)) {
                     try {
                         processCardinalResult(s);
                     } catch (BSProcess3DSResultRequestException | JSONException e) {
                         setThreeDSAuthResult(ThreeDSManagerResponse.THREE_DS_ERROR.name());
-                         BlueSnapLocalBroadcastManager.INSTANCE.sendMessage(context, THREE_DS_AUTH_DONE_EVENT, e.getMessage(), TAG);
+                        if (safeContext != null) {
+                            BlueSnapLocalBroadcastManager.INSTANCE.sendMessage(safeContext, THREE_DS_AUTH_DONE_EVENT, e.getMessage(), TAG);
+                        } else {
+                            Log.e(TAG, "Cannot send 3DS auth done event - context is null");
+                        }
                         return;
                     }
 
@@ -237,7 +244,11 @@ public class CardinalManager  {
                     setThreeDSAuthResult(ThreeDSManagerResponse.AUTHENTICATION_CANCELED.name());
                 }
 
-                 BlueSnapLocalBroadcastManager.INSTANCE.sendMessage(context, THREE_DS_AUTH_DONE_EVENT, TAG);
+                if (safeContext != null) {
+                    BlueSnapLocalBroadcastManager.INSTANCE.sendMessage(safeContext, THREE_DS_AUTH_DONE_EVENT, TAG);
+                } else {
+                    Log.e(TAG, "Cannot send 3DS auth done event - context is null");
+                }
             }
         });
 

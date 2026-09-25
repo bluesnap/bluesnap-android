@@ -9,6 +9,8 @@ import com.bluesnap.android.demoapp.BlueSnapCheckoutUITests.CheckoutCommonTester
 import com.bluesnap.android.demoapp.BlueSnapCheckoutUITests.CheckoutCommonTesters.CreditCardLineTesterCommon;
 import com.bluesnap.android.demoapp.BlueSnapCheckoutUITests.CheckoutCommonTesters.CreditCardVisibilityTesterCommon;
 import com.bluesnap.android.demoapp.BlueSnapCheckoutUITests.CheckoutReturningShopperTests.ReturningShoppersFactory;
+import com.bluesnap.android.demoapp.EspressoTimeoutConfig;
+import com.bluesnap.android.demoapp.SlowRunnerEspressoConfig;
 import com.bluesnap.android.demoapp.R;
 import com.bluesnap.android.demoapp.TestUtils;
 import com.bluesnap.android.demoapp.TestingShopperCheckoutRequirements;
@@ -56,6 +58,9 @@ public class CheckoutEspressoBasedTester {
     protected UIAutoTestingBlueSnapService<BluesnapCheckoutActivity> uIAutoTestingBlueSnapService = new UIAutoTestingBlueSnapService<>(mActivityRule);
 
     public CheckoutEspressoBasedTester() {
+        // Configure extended timeouts and safe actions for slow CI environments
+        SlowRunnerEspressoConfig.setupForSlowRunner();
+
         checkoutCurrency = uIAutoTestingBlueSnapService.getCheckoutCurrency();
         purchaseAmount = uIAutoTestingBlueSnapService.getPurchaseAmount();
         taxPercent = uIAutoTestingBlueSnapService.getTaxPercent();

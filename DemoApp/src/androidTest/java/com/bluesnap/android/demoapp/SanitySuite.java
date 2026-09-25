@@ -19,7 +19,8 @@ import org.junit.runners.Suite;
         ChooseCreditCardPaymentMethod.class,
         CreateCreditCardPayment.class,
         SubscriptionChargeFullBillingWithShippingWithEmailTests.class,
-        SanityCheckoutEndToEndTests.class
+        SanityCheckoutEndToEndTests.class,
+        ThreeDSecureUITests.class
 })
 public class SanitySuite {
 }

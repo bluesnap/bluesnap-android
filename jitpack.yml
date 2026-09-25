@@ -1,6 +1,8 @@
-# JDK option is ignores due to jitpack issue https://github.com/jitpack/jitpack.io/issues/4260
-#jdk:
-#  - openjdk21
+# JitPack builds the published artifact. Build with JDK 17: the library targets Java 17
+# bytecode, which is what AGP 8.x/9.x consumers can read (they require JDK 17).
+# The `jdk:` option is ignored (https://github.com/jitpack/jitpack.io/issues/4260), so
+# install via SDKMAN. SDKMAN keeps only the latest patch of each JDK (a pinned patch
+# like 19.0.2-zulu disappears and breaks the build), so resolve Temurin 17 at build time.
 before_install:
-  - sdk install java 19.0.2-zulu
-  - sdk use java 19.0.2-zulu
+  - sdk install java "$(curl -s 'https://api.sdkman.io/2/candidates/java/linuxx64/versions/list?current=&installed=' | tr '|' '\n' | tr -d ' ' | grep -E '^17\.[0-9.]+-tem$' | head -1)"
+  - sdk use java "$(curl -s 'https://api.sdkman.io/2/candidates/java/linuxx64/versions/list?current=&installed=' | tr '|' '\n' | tr -d ' ' | grep -E '^17\.[0-9.]+-tem$' | head -1)"

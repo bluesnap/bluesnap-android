@@ -6,6 +6,8 @@ import androidx.test.rule.ActivityTestRule;
 import com.bluesnap.android.demoapp.BlueSnapCheckoutUITests.CheckoutCommonTesters.ContactInfoTesterCommon;
 import com.bluesnap.android.demoapp.BlueSnapCheckoutUITests.CheckoutCommonTesters.CreditCardLineTesterCommon;
 import com.bluesnap.android.demoapp.BlueSnapCheckoutUITests.CheckoutCommonTesters.CreditCardVisibilityTesterCommon;
+import com.bluesnap.android.demoapp.EspressoTimeoutConfig;
+import com.bluesnap.android.demoapp.SlowRunnerEspressoConfig;
 import com.bluesnap.android.demoapp.R;
 import com.bluesnap.android.demoapp.TestUtils;
 import com.bluesnap.android.demoapp.TestingShopperCheckoutRequirements;
@@ -46,6 +48,11 @@ public class ChoosePaymentMethodEspressoBasedTester {
 
     protected UIAutoTestingBlueSnapService<BluesnapChoosePaymentMethodActivity> uIAutoTestingBlueSnapService = new UIAutoTestingBlueSnapService<>(mActivityRule);
 
+    public ChoosePaymentMethodEspressoBasedTester() {
+        // Configure extended timeouts and safe actions for slow CI environments
+        SlowRunnerEspressoConfig.setupForSlowRunner();
+    }
+
     protected void choosePaymentSetup(boolean createShopper, boolean withCreditCard) throws BSPaymentRequestException, InterruptedException, JSONException {
         if (createShopper)
             uIAutoTestingBlueSnapService.createVaultedShopper(withCreditCard);
@@ -60,8 +67,8 @@ public class ChoosePaymentMethodEspressoBasedTester {
     }
 
     void chooseNewCardPaymentMethod(TestingShopperCreditCard creditCard) throws InterruptedException {
-        //choose new card
-        onView(ViewMatchers.withId(R.id.newCardButton)).perform(click());
+        //choose new card - use safe click for CI stability
+        SlowRunnerEspressoConfig.performSafeClick(onView(ViewMatchers.withId(R.id.newCardButton)));
         ContactInfoTesterCommon.changeCountry(R.id.billingViewComponent, ContactInfoTesterCommon.billingContactInfo.getCountryValue());
         CreditCardLineTesterCommon.fillInCCLineWithValidCard(TestingShopperCreditCard.MASTERCARD_CREDIT_CARD);
         ContactInfoTesterCommon.fillInContactInfo(R.id.billingViewComponent, ContactInfoTesterCommon.billingContactInfo.getCountryKey(), shopperCheckoutRequirements.isFullBillingRequired(),

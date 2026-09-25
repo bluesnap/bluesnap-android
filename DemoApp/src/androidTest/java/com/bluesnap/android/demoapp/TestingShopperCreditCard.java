@@ -1,30 +1,55 @@
 package com.bluesnap.android.demoapp;
 
+import java.time.Year;
+
 /**
  * Created by sivani on 30/08/2018.
  */
 
 public class TestingShopperCreditCard {
 
+    static Year expyear = java.time.Year.now().plusYears(2);
+    static String lastYearTwoDigits =  expyear.toString().substring(expyear.toString().length() -2);
+
+    /**
+     * see docs:
+     * Frictionless test cases:  https://developer.cardinaltrusted.com/reference/frictionless-authentication-test-cases
+     * Challenge test cases: https://developer.cardinaltrusted.com/reference/emv-3ds-test-cases-challenge
+     *
+     */
+
     public static final TestingShopperCreditCard VISA_CREDIT_CARD = new TestingShopperCreditCard("4111111111111111", "123", "1111",
-            "VISA", "", 11, 2025, "25");
+            "VISA", "", 01, expyear.getValue(), lastYearTwoDigits);
     public static final TestingShopperCreditCard MASTERCARD_CREDIT_CARD = new TestingShopperCreditCard("5572758886015288", "123", "5288",
-            "MASTERCARD", "DEBIT", 12, 2026, "26");
+            "MASTERCARD", "DEBIT", 12, expyear.getValue(), lastYearTwoDigits);
 
-    public static final TestingShopperCreditCard VISA_CREDIT_CARD_FOR_3DS_SUCCESS = new TestingShopperCreditCard("4000000000001091", "123", "1091",
-            "VISA", "", 10, 2025, "25");
+    public static final TestingShopperCreditCard VISA_CREDIT_CARD_FOR_3DS_SUCCESS = new TestingShopperCreditCard("4000000000002503", "123", "1091",
+            "VISA", "", 01, expyear.getValue(), lastYearTwoDigits);
 
-    public static final TestingShopperCreditCard VISA_CREDIT_CARD_FOR_3DS_UNAVAILABLE = new TestingShopperCreditCard("4000000000001059", "123", "1059",
-            "VISA", "", 10, 2025, "25");
+    public static final TestingShopperCreditCard VISA_CREDIT_CARD_FOR_3DS_UNAVAILABLE = new TestingShopperCreditCard("4000000000002990", "123", "1059",
+            "VISA", "", 01, expyear.getValue(), lastYearTwoDigits);
 
     public static final TestingShopperCreditCard VISA_CREDIT_CARD_FOR_3DS_NOT_SUPPORTED = new TestingShopperCreditCard("4000000000000002", "123", "0002",
-            "VISA", "", 10, 2025, "25");
+            "VISA", "", 01, expyear.getValue(), lastYearTwoDigits);
 
-    public static final TestingShopperCreditCard VISA_CREDIT_CARD_FOR_3DS_BYPASS = new TestingShopperCreditCard("4000000000001133", "123", "1133",
-            "VISA", "", 10, 2025, "25");
+    public static final TestingShopperCreditCard VISA_CREDIT_CARD_FOR_3DS_BYPASS = new TestingShopperCreditCard("4000000000002560", "123", "1133",
+            "VISA", "", 01, expyear.getValue(), lastYearTwoDigits);
 
     public static final TestingShopperCreditCard VISA_CREDIT_CARD_FOR_3DS_FAILURE = new TestingShopperCreditCard("4000000000001109", "123", "1109",
-            "VISA", "", 10, 2025, "25");
+            "VISA", "", 01, expyear.getValue(), lastYearTwoDigits);
+
+    // Frictionless success - PAResStatus Y, no challenge required
+    // Cardinal docs: https://developer.cardinaltrusted.com/reference/frictionless-authentication-test-cases
+    public static final TestingShopperCreditCard VISA_CREDIT_CARD_FOR_3DS_FRICTIONLESS_SUCCESS = new TestingShopperCreditCard("4000000000002701", "123", "2701",
+            "VISA", "", 01, expyear.getValue(), lastYearTwoDigits);
+
+    // Rejected by issuer - PAResStatus R, frictionless flow
+    public static final TestingShopperCreditCard VISA_CREDIT_CARD_FOR_3DS_REJECTED = new TestingShopperCreditCard("4000000000002537", "123", "2537",
+            "VISA", "", 01, expyear.getValue(), lastYearTwoDigits);
+
+    // Attempts/Stand-in - PAResStatus A, frictionless flow
+    public static final TestingShopperCreditCard VISA_CREDIT_CARD_FOR_3DS_ATTEMPTS = new TestingShopperCreditCard("4000000000002719", "123", "2719",
+            "VISA", "", 01, expyear.getValue(), lastYearTwoDigits);
 
     private String cardNumber;
     private String cvv;

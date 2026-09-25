@@ -9,7 +9,6 @@ import com.bluesnap.androidapi.services.BlueSnapValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.time.Year;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 
@@ -249,7 +248,7 @@ public class InstrumentedCardTest extends BSAndroidIntegrationTestsBase {
 
     @Test
     public void testValidateExpiryDate() {
-        assertTrue("this date should be in the future", BlueSnapValidator.Companion.getInstance().isDateInFuture(11, 25));
+        assertTrue("this date should be in the future", BlueSnapValidator.Companion.getInstance().isDateInFuture(11, TestExpirationDateUtils.getFutureYearTwoDigit()));
         CreditCard card = new CreditCard();
         card.setExpirationMonth(13);
         card.setExpirationYear(33);
@@ -296,27 +295,27 @@ public class InstrumentedCardTest extends BSAndroidIntegrationTestsBase {
     @Test
     public void testFuturePastExpiryDates() {
         CreditCard card = new CreditCard();
-        int futureyear = Year.now().plusYears(2).getValue();
+        int futureYear = TestExpirationDateUtils.getFutureYearTwoDigit();
 
         card.setExpirationMonth(Calendar.DECEMBER);
         card.setExpirationYear(05);
         assertFalse(BlueSnapValidator.Companion.getInstance().isDateInFuture(card.getExpirationMonth(), card.getExpirationYear()));
         assertFalse(BlueSnapValidator.Companion.getInstance().creditCardExpiryDateValidation(card.getExpirationYear(), card.getExpirationMonth()));
         card.setExpirationMonth(11);
-        card.setExpirationYear(futureyear);
+        card.setExpirationYear(futureYear);
         assertTrue(BlueSnapValidator.Companion.getInstance().isDateInFuture(card.getExpirationMonth(), card.getExpirationYear()));
         card.setExpirationMonth(12);
-        card.setExpirationYear(futureyear);
+        card.setExpirationYear(futureYear);
         assertTrue(BlueSnapValidator.Companion.getInstance().creditCardExpiryDateValidation(card.getExpirationYear(), card.getExpirationMonth()));
         card.setExpirationMonth(1);
-        card.setExpirationYear(futureyear);
+        card.setExpirationYear(futureYear);
         assertTrue(BlueSnapValidator.Companion.getInstance().creditCardExpiryDateValidation(card.getExpirationYear(), card.getExpirationMonth()));
     }
 
     @Test
     public void validLuhnAndNoType() {
         CreditCard card = new CreditCard();
-        card.update(CARD_NUMBER_VALID_LUHN_UNKNOWN_TYPE, "11/25", "123");
+        card.update(CARD_NUMBER_VALID_LUHN_UNKNOWN_TYPE, TestExpirationDateUtils.getDefaultExpirationDateString(), "123");
         //assertTrue("this should be a valid luhn", BlueSnapValidator.Companion.getInstance().isValidLuhnNumber(CARD_NUMBER_VALID_LUHN_UNKNOWN_TYPE));
         assertTrue(BlueSnapValidator.Companion.getInstance().creditCardNumberValidation(card.getNumber()));
         assertTrue(BlueSnapValidator.Companion.getInstance().creditCardFullValidation(card));
@@ -327,7 +326,7 @@ public class InstrumentedCardTest extends BSAndroidIntegrationTestsBase {
     @Test
     public void testValidateAll() {
         CreditCard card = new CreditCard();
-        card.update(CARD_NUMBER_VALID_LUHN_UNKNOWN_TYPE, String.format("11/" + Year.now().plusYears(2).getValue()), "123");
+        card.update(CARD_NUMBER_VALID_LUHN_UNKNOWN_TYPE, TestExpirationDateUtils.getDefaultExpirationDateString(), "123");
         //assertTrue("this should be a valid luhn", CreditCard.isValidLuhnNumber(CARD_NUMBER_VALID_LUHN_UNKNOWN_TYPE));
         assertTrue(BlueSnapValidator.Companion.getInstance().creditCardNumberValidation(card.getNumber()));
         assertTrue(BlueSnapValidator.Companion.getInstance().creditCardFullValidation(card));
@@ -339,7 +338,7 @@ public class InstrumentedCardTest extends BSAndroidIntegrationTestsBase {
         CreditCard creditCard = creditCardInfo.getCreditCard();
         ContactInfo billingInfo = creditCardInfo.getBillingContactInfo();
         String number = CARD_NUMBER_VALID_LUHN_MASTERCARD_FAKED;
-        creditCard.update(number, "11/25", "123");
+        creditCard.update(number, TestExpirationDateUtils.getDefaultExpirationDateString(), "123");
         billingInfo.setFullName("Homer Ssn");
         //assertTrue("this should be a valid luhn", CreditCard.isValidLuhnNumber(CARD_NUMBER_VALID_LUHN_UNKNOWN_TYPE));
         assertTrue(BlueSnapValidator.Companion.getInstance().creditCardNumberValidation(creditCard.getNumber()));

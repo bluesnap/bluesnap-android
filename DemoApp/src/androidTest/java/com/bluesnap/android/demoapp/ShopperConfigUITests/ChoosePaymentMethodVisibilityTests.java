@@ -74,7 +74,7 @@ public class ChoosePaymentMethodVisibilityTests extends ChoosePaymentMethodEspre
         //verify that existing credit card component is displayed with the right content
         ReturningShopperVisibilityTesterCommon.credit_card_in_list_visibility_validation("supported_payment_methods_visibility_test in ",
                 TestingShopperCreditCard.VISA_CREDIT_CARD.getCardLastFourDigits(),
-                Integer.toString(TestingShopperCreditCard.VISA_CREDIT_CARD.getExpirationMonth()) + "/" +
+                String.format("%02d", TestingShopperCreditCard.VISA_CREDIT_CARD.getExpirationMonth()) + "/" +
                         TestingShopperCreditCard.VISA_CREDIT_CARD.getExpirationYearLastTwoDigit());
         
         // Clear any potential focus or selection state from validation

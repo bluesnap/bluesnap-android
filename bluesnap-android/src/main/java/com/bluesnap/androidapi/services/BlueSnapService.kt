@@ -254,11 +254,11 @@ class BlueSnapService {
 
 
     /**
-     * Tokenize ACH/ECP details,
-     * blueSnapHTTPResponse.getResponseCode() will return HTTP_OK on successful tokenization.
-     * @return BlueSnapHTTPResponse
+     * Update details on the BlueSnapValidator Server
+     *
      * @param ecpAchDetails [EcpAchDetails]
-     * @throws JSONException                in case of invalid JSON object
+     * @throws JSONException                in case of invalid JSON object (should not happen)
+     * @throws UnsupportedEncodingException should not happen
      */
     @Throws(JSONException::class)
     fun submitTokenizedEcpAchDetails(ecpAchDetails: EcpAchDetails): BlueSnapHTTPResponse {

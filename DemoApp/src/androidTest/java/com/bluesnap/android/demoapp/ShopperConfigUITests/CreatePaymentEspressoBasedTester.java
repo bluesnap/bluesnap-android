@@ -3,6 +3,8 @@ package com.bluesnap.android.demoapp.ShopperConfigUITests;
 import androidx.test.rule.ActivityTestRule;
 
 import com.bluesnap.android.demoapp.BlueSnapCheckoutUITests.WebViewUITests.PayPalWebViewTests;
+import com.bluesnap.android.demoapp.EspressoTimeoutConfig;
+import com.bluesnap.android.demoapp.SlowRunnerEspressoConfig;
 import com.bluesnap.android.demoapp.TestingShopperCheckoutRequirements;
 import com.bluesnap.android.demoapp.UIAutoTestingBlueSnapService;
 import com.bluesnap.androidapi.models.SdkRequest;
@@ -34,6 +36,9 @@ public class CreatePaymentEspressoBasedTester {
     protected UIAutoTestingBlueSnapService<BluesnapCreatePaymentActivity> uIAutoTestingBlueSnapService = new UIAutoTestingBlueSnapService<>(mActivityRule);
 
     public CreatePaymentEspressoBasedTester() {
+        // Configure extended timeouts and safe actions for slow CI environments
+        SlowRunnerEspressoConfig.setupForSlowRunner();
+
         checkoutCurrency = uIAutoTestingBlueSnapService.getCheckoutCurrency();
         purchaseAmount = uIAutoTestingBlueSnapService.getPurchaseAmount();
     }

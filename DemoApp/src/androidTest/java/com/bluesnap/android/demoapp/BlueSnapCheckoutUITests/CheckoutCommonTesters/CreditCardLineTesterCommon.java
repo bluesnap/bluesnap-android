@@ -175,7 +175,7 @@ public class CreditCardLineTesterCommon {
         onView(withId(R.id.creditCardNumberEditText))
                 .perform(click(), clearText(), typeText(creditCard.getCardNumber()));
 
-        onView(withId(R.id.expEditText)).perform(clearText(), typeText(Integer.toString(creditCard.getExpirationMonth()) + " " + creditCard.getExpirationYearLastTwoDigit()));
+        onView(withId(R.id.expEditText)).perform(clearText(), typeText(String.format("%02d", creditCard.getExpirationMonth()) + " " + creditCard.getExpirationYearLastTwoDigit()));
 
         onView(withId(R.id.cvvEditText)).perform(clearText(), typeText(creditCard.getCvv()));
     }

@@ -25,6 +25,7 @@ import com.bluesnap.androidapi.Constants;
 import com.bluesnap.androidapi.services.AndroidUtil;
 
 import com.bluesnap.android.demoapp.EspressoSyncUtils;
+import com.bluesnap.android.demoapp.SlowRunnerEspressoConfig;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -328,7 +329,10 @@ public class TestUtils {
 
     public static void pressBuyNowButton(int buttonComponentResourceId) {
         EspressoSyncUtils.ensureKeyboardClosedAndStable();
-        onView(allOf(withId(R.id.buyNowButton), isDescendantOfA(withId(buttonComponentResourceId)))).perform(click());
+        // Use safe click with window focus handling for CI stability
+        SlowRunnerEspressoConfig.performSafeClick(
+            onView(allOf(withId(R.id.buyNowButton), isDescendantOfA(withId(buttonComponentResourceId))))
+        );
     }
 
     public static void setShippingSameAsBillingSwitch(boolean setOn) {
